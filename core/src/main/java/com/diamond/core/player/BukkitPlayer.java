@@ -104,9 +104,7 @@ public class BukkitPlayer {
 		try {
 			PreparedStatement stmt = Main.getMysql().getConn().prepareStatement(CoreQuerys.ACCOUNT_SELECT.getQuery());
 			stmt.setString(1, getUniqueId().toString());
-			ResultSet rs = stmt.executeQuery();
 			if(exists()) { 
-				Main.debug("Existe conta");
 				PreparedStatement stmtUpdate = Main.getMysql().getConn().prepareStatement(CoreQuerys.ACCOUNT_UPDATE.getQuery());
 				stmtUpdate.setString(1, getName());
 				stmtUpdate.setString(2, getAddress());
@@ -119,9 +117,9 @@ public class BukkitPlayer {
 				stmtUpdate.setInt(9, getXp());
 				stmtUpdate.setDouble(10, getCoins());
 				stmtUpdate.setString(11, getUniqueId().toString());
+				stmtUpdate.execute();
 				stmtUpdate.close();
 			} else { 
-				Main.debug("Não existe conta");
 				PreparedStatement stmtInsert = Main.getMysql().getConn().prepareStatement(CoreQuerys.ACCOUNT_INSERT.getQuery());
 				stmtInsert.setString(1, getUniqueId().toString());
 				stmtInsert.setString(2, getName());
@@ -135,16 +133,11 @@ public class BukkitPlayer {
 				stmtInsert.setString(10, getPermissions().toString());
 				stmtInsert.setInt(11, getXp());
 				stmtInsert.setDouble(12, getCoins());
+				stmtInsert.execute();
 				stmtInsert.close();
 			}
-			rs.close();
 		} catch (Exception e) {
-			Main.debug("Ocorreu um erro ao salvar conta de " + getName() + ".");
 			Main.debug("1º> " + e.getMessage());
-			Main.debug("2º> " + e.getLocalizedMessage());
-			Main.debug("3º> " + e.getCause());
-			Main.debug("4º> " + e.getStackTrace());
-			Main.debug("5º> " + e.getSuppressed());
 		}
 	}
 	

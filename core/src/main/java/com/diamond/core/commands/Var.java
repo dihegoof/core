@@ -22,6 +22,10 @@ public class Var extends Utils implements CommandExecutor {
 				player.kickPlayer("§cVocê foi §lKICKADO§c!\n\n§cSua conta encontra-se com problemas!");
 				return true;
 			}
+			if(args.length == 0) {
+				help(label, "", sender);
+				return true;
+			}
 			switch (args[0]) {
 			case "conta":
 				if(args.length == 2) { 
@@ -64,6 +68,10 @@ public class Var extends Utils implements CommandExecutor {
 	
 	void help(String label, String session, CommandSender sender) {
 		if(session.equalsIgnoreCase("conta")) { 
+			sintaxCommand(sender, 
+					"§c/" + label + " conta <jogador>",
+					"§c/" + label + " conta <jogador> grupo <nome do grupo>");
+		} else { 
 			sintaxCommand(sender, 
 					"§c/" + label + " conta <jogador>",
 					"§c/" + label + " conta <jogador> grupo <nome do grupo>");
