@@ -6,18 +6,28 @@ import lombok.Getter;
 public enum Tables {
 	
 	ACCOUNTS("accounts", new DataValues[] { 
-			DataValues.UNIQUEID,  
+			DataValues.UNIQUE_ID,  
 			DataValues.NICKNAME, 
 			DataValues.ADDRESS, 
 			DataValues.GROUP, 
-			DataValues.TIMEGROUP, 
-			DataValues.JOININ, 
-			DataValues.LASTSEE, 
+			DataValues.TIME_GROUP, 
+			DataValues.JOIN_IN, 
+			DataValues.LAST_SEE, 
 			DataValues.TAG, 
-			DataValues.RANK, 
-			DataValues.PERMISSIONS, 
-			DataValues.XP, 
-			DataValues.COINS, });
+			DataValues.PERMISSIONS }),
+	
+	TAGS("tags", new DataValues[] {
+			DataValues.TAG_NAME,
+			DataValues.TAG_PREFIX,
+			DataValues.TAG_ORDER,
+			DataValues.TAG_EXCLUSIVE }),
+	
+	GROUPS("groups", new DataValues[] {
+			DataValues.GROUP_NAME,
+			DataValues.GROUP_PERMISSIONS,
+			DataValues.GROUP_EXCLUSIVE,
+			DataValues.GROUP_DEFAULTED })
+	;
 
 	String name;
 	DataValues[] dataValues;

@@ -6,6 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.diamond.core.mysql.MySql;
 import com.diamond.core.player.BukkitPlayerManager;
+import com.diamond.core.player.group.GroupManager;
+import com.diamond.core.player.tags.TagManager;
 
 import lombok.Getter;
 
@@ -33,6 +35,8 @@ public class Main extends JavaPlugin {
     	mysql.open();
     	mysql.create();
     	BukkitPlayerManager.getInstance().load();
+    	TagManager.getInstance().load();
+    	GroupManager.getInstance().load();
     	for(String loaderListener : listeners) { 
 			ClassGetter.getInstance().events("com.diamond.core." + loaderListener);
 		}
@@ -45,6 +49,8 @@ public class Main extends JavaPlugin {
     
     public void onDisable() {
     	debug("Plugin desativado com sucesso!");
+    	TagManager.getInstance().save();
+    	GroupManager.getInstance().save();
     	plugin = null;
     }
     

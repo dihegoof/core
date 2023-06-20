@@ -9,12 +9,10 @@ import java.util.UUID;
 
 import com.diamond.core.Main;
 import com.diamond.core.mysql.data.CoreQuerys;
-import com.diamond.core.player.ranking.Rank;
-import com.diamond.core.player.tags.Tag;
 
 import lombok.Getter;
 
-public class BukkitPlayerManager {
+public class BukkitPlayerManager  {
 	
 	@Getter
 	static BukkitPlayerManager instance = new BukkitPlayerManager();
@@ -38,7 +36,7 @@ public class BukkitPlayerManager {
 			PreparedStatement stmt = Main.getMysql().getConn().prepareStatement(CoreQuerys.ACCOUNT_SELECT_ALL.getQuery());;
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) { 
-				add(new BukkitPlayer(UUID.fromString(rs.getString("uniqueid")), rs.getString("nickname"), rs.getString("address"), Group.valueOf(rs.getString("group")), rs.getLong("timegroup"), rs.getLong("joinin"), rs.getLong("lastsee"), Tag.valueOf(rs.getString("tag")), Rank.valueOf(rs.getString("rank")), Arrays.asList(rs.getString("permissions")), rs.getInt("xp"), rs.getInt("coins")));
+				add(new BukkitPlayer(UUID.fromString(rs.getString("uniqueid")), rs.getString("nickname"), rs.getString("address"), rs.getString("group"), rs.getString("tag"), rs.getLong("timegroup"), rs.getLong("joinin"), rs.getLong("lastsee"), Arrays.asList(rs.getString("permissions").replace("[", "").replace("]", ""))));
 				amount++;
 			}
 			if(amount > 0) 
@@ -46,6 +44,10 @@ public class BukkitPlayerManager {
 		} catch (Exception e) {
 			Main.debug("Ocorreu um erro ao carregar as contas!");
 		}
+	}
+	
+	public void save() { 
+		
 	}
 	
 	public BukkitPlayer get(UUID uniqueId) { 

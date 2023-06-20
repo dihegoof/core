@@ -17,6 +17,7 @@ public class PlayerListener implements Listener {
 			bp = new BukkitPlayer(event.getPlayer());
 			BukkitPlayerManager.getInstance().add(bp);
 		}
+		bp.verify();
 		bp.setOnline(true);
 		bp.setPlayer(event.getPlayer());
 	}
