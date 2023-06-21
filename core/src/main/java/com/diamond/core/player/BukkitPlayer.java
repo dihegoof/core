@@ -12,6 +12,8 @@ import com.diamond.core.Main;
 import com.diamond.core.mysql.data.CoreQuerys;
 import com.diamond.core.player.group.Group;
 import com.diamond.core.player.group.GroupManager;
+import com.diamond.core.player.tags.Tag;
+import com.diamond.core.player.tags.TagManager;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,17 +23,18 @@ import lombok.Setter;
 public class BukkitPlayer {
 	
 	UUID uniqueId;
-	String name, address, group, tag;
+	String name, address, group, lastGroup, tag;
 	Player player;
 	long timeGroup, joinIn, lastSee;
 	List<String> permissions;
 	boolean online;
 	
-	public BukkitPlayer(UUID uniqueId, String name, String address, String group, String tag, long timeGroup, long joinIn, long lastSee, List<String> permissions) {
+	public BukkitPlayer(UUID uniqueId, String name, String address, String group, String lastGroup, String tag, long timeGroup, long joinIn, long lastSee, List<String> permissions) {
 		this.uniqueId = uniqueId;
 		this.name = name;
 		this.address = address;
 		this.group = group;
+		this.lastGroup = lastGroup;
 		this.tag = tag;
 		this.player = null;
 		this.joinIn = joinIn;
@@ -46,6 +49,7 @@ public class BukkitPlayer {
 		this.name = name;
 		this.address = address;
 		this.group = "NRE";
+		this.lastGroup = "NRE";
 		this.tag = "NRE";
 		this.player = null;
 		this.joinIn = System.currentTimeMillis();
@@ -60,6 +64,7 @@ public class BukkitPlayer {
 		this.name = player.getName();
 		this.address = player.getAddress().getHostString();
 		this.group = "NRE";
+		this.lastGroup = "NRE";
 		this.tag = "NRE";
 		this.player = null;
 		this.joinIn = System.currentTimeMillis();
@@ -78,11 +83,12 @@ public class BukkitPlayer {
 				stmtUpdate.setString(1, getName());
 				stmtUpdate.setString(2, getAddress());
 				stmtUpdate.setString(3, getGroup().getName());
-				stmtUpdate.setLong(4, getTimeGroup());
-				stmtUpdate.setLong(5, getLastSee());
-				stmtUpdate.setString(6, getTag());
-				stmtUpdate.setString(7, getPermissions().toString());
-				stmtUpdate.setString(8, getUniqueId().toString());
+				stmtUpdate.setString(4, getLastGroup());
+				stmtUpdate.setLong(5, getTimeGroup());
+				stmtUpdate.setLong(6, getLastSee());
+				stmtUpdate.setString(7, getTag());
+				stmtUpdate.setString(8, getPermissions().toString());
+				stmtUpdate.setString(9, getUniqueId().toString());
 				stmtUpdate.execute();
 				stmtUpdate.close();
 			} else { 
@@ -91,16 +97,17 @@ public class BukkitPlayer {
 				stmtInsert.setString(2, getName());
 				stmtInsert.setString(3, getAddress());
 				stmtInsert.setString(4, getGroup().getName());
-				stmtInsert.setLong(5, getTimeGroup());
-				stmtInsert.setLong(6, getJoinIn());
-				stmtInsert.setLong(7, getLastSee());
-				stmtInsert.setString(8, getTag());
-				stmtInsert.setString(9, getPermissions().toString());
+				stmtInsert.setString(5, getLastGroup());
+				stmtInsert.setLong(6, getTimeGroup());
+				stmtInsert.setLong(7, getJoinIn());
+				stmtInsert.setLong(8, getLastSee());
+				stmtInsert.setString(9, getTag());
+				stmtInsert.setString(10, getPermissions().toString());
 				stmtInsert.execute();
 				stmtInsert.close();
 			}
 		} catch (Exception e) {
-			Main.debug(e.getMessage());
+			Main.debug("> " + e.getLocalizedMessage());
 		}
 	}
 	
@@ -123,9 +130,34 @@ public class BukkitPlayer {
 		return getPermissions().contains(permission) || getPermissions().contains("*") || getGroup().hasPermission(permission);
 	}
 
-	public void verify() {
-		if(GroupManager.getInstance().get(getGroup().getName()) == null && GroupManager.getInstance().defaultGroup() != null) {
-			setGroup(GroupManager.getInstance().defaultGroup().getName());
+	public void check() {
+		if(!GroupManager.getInstance().getGroups().isEmpty()) { 
+			if(this.group.equals("NRE") && GroupManager.getInstance().defaultGroup() != null) {
+				setGroup(GroupManager.getInstance().defaultGroup().getName());
+			}
 		}
+		if(getTag().equalsIgnoreCase("NRE")) { 
+			if(!TagManager.getInstance().getTags().isEmpty()) { 
+				if(TagManager.getInstance().get(getGroup().getName()) != null && TagManager.getInstance().get(getGroup().getName()).hasPrefix()) {
+					TagManager.getInstance().get(getGroup().getName()).applyTag(this);
+				}
+			}
+			return;
+		}
+		TagManager.getInstance().get(getTag()).applyTag(this);
+	}
+	
+	public boolean isGroupPermanent() { 
+		return getTimeGroup() == -1;
+	}
+	
+	public List<Tag> getTags() { 
+		List<Tag> tags = new ArrayList<>();
+		for(Tag ta : TagManager.getInstance().getTags()) { 
+			if(hasPermission(ta.getPermission()) || ta.getName().equals(getGroup().getName())) { 
+				tags.add(ta);
+			}
+		}
+		return tags;
 	}
 }

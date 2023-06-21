@@ -5,3 +5,4 @@ author: Dihego
 main: com.diamond.core.Main
 commands: 
    var:
+   tag:

@@ -32,14 +32,17 @@ public class GroupManager {
 	public void load() {
 		int amount = 0;
 		try {
-			PreparedStatement stmt = Main.getMysql().getConn().prepareStatement(CoreQuerys.GROUP_SELECT_ALL.getQuery());;
+			PreparedStatement stmt = Main.getMysql().getConn().prepareStatement(CoreQuerys.GROUP_SELECT_ALL.getQuery());
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) { 
 				add(new Group(rs.getString("groupname"), Arrays.asList(rs.getString("grouppermissions").replace("[", "").replace("]", "")), rs.getBoolean("groupexclusive"), rs.getBoolean("groupdefaulted")));
 				amount++;
 			}
-			if(amount > 0) 
+			if(amount > 0) { 
 				Main.debug("Carregado " + amount + " grupo(s)");
+			} else { 
+				add(new Group("Membro", new ArrayList<>(), false, true));
+			}
 		} catch (Exception e) {
 			Main.debug("Ocorreu um erro ao carregar os grupos!");
 		}
@@ -69,5 +72,9 @@ public class GroupManager {
 			}
 		}
 		return null;
+	}
+	
+	public List<Group> getGroups() {
+		return storageGroups;
 	}
 }

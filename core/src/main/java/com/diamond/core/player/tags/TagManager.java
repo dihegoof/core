@@ -34,7 +34,7 @@ public class TagManager {
 			PreparedStatement stmt = Main.getMysql().getConn().prepareStatement(CoreQuerys.TAG_SELECT_ALL.getQuery());;
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) { 
-				add(new Tag(rs.getString("tagname"), rs.getString("tagprefix"), rs.getInt("tagorder"), rs.getBoolean("tagexclusive")));
+				add(new Tag(rs.getString("tagname"), rs.getString("tagprefix"), rs.getString("tagpermission"), rs.getInt("tagorder"), rs.getBoolean("tagexclusive")));
 				amount++;
 			}
 			if(amount > 0) 
@@ -57,5 +57,9 @@ public class TagManager {
 			}
 		}
 		return null;
+	}
+	
+	public List<Tag> getTags() { 
+		return storageTags;
 	}
 }

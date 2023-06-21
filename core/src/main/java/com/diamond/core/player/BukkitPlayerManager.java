@@ -36,7 +36,7 @@ public class BukkitPlayerManager  {
 			PreparedStatement stmt = Main.getMysql().getConn().prepareStatement(CoreQuerys.ACCOUNT_SELECT_ALL.getQuery());;
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) { 
-				add(new BukkitPlayer(UUID.fromString(rs.getString("uniqueid")), rs.getString("nickname"), rs.getString("address"), rs.getString("group"), rs.getString("tag"), rs.getLong("timegroup"), rs.getLong("joinin"), rs.getLong("lastsee"), Arrays.asList(rs.getString("permissions").replace("[", "").replace("]", ""))));
+				add(new BukkitPlayer(UUID.fromString(rs.getString("uniqueid")), rs.getString("nickname"), rs.getString("address"), rs.getString("group"), rs.getString("lastgroup"), rs.getString("tag"), rs.getLong("timegroup"), rs.getLong("joinin"), rs.getLong("lastsee"), Arrays.asList(rs.getString("permissions").replace("[", "").replace("]", ""))));
 				amount++;
 			}
 			if(amount > 0) 
@@ -44,10 +44,6 @@ public class BukkitPlayerManager  {
 		} catch (Exception e) {
 			Main.debug("Ocorreu um erro ao carregar as contas!");
 		}
-	}
-	
-	public void save() { 
-		
 	}
 	
 	public BukkitPlayer get(UUID uniqueId) { 
@@ -66,5 +62,9 @@ public class BukkitPlayerManager  {
 			}
 		}
 		return null;
+	}
+	
+	public List<BukkitPlayer> getAccounts() { 
+		return storageBukkitPlayers;
 	}
 }

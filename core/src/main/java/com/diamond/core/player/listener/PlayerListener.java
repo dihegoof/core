@@ -17,18 +17,18 @@ public class PlayerListener implements Listener {
 			bp = new BukkitPlayer(event.getPlayer());
 			BukkitPlayerManager.getInstance().add(bp);
 		}
-		bp.verify();
 		bp.setOnline(true);
 		bp.setPlayer(event.getPlayer());
+		bp.check();
 	}
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) { 
 		BukkitPlayer bp = BukkitPlayerManager.getInstance().get(event.getPlayer().getUniqueId());
 		if(bp == null) return;
+		bp.save();
 		bp.setOnline(false);
 		bp.setPlayer(null);
 		bp.setLastSee(System.currentTimeMillis());
-		bp.save();
 	}
 }

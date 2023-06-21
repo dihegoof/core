@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 
 import com.diamond.core.Main;
 import com.diamond.core.mysql.data.CoreQuerys;
+import com.diamond.core.player.BukkitPlayer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,13 +14,14 @@ import lombok.Setter;
 @Getter
 public class Tag {
 	
-	String name, prefix;
+	String name, prefix, permission;
 	int order;
 	boolean exclusive;
 	
-	public Tag(String name, String prefix, int order, boolean exclusive) {
+	public Tag(String name, String prefix, String permission, int order, boolean exclusive) {
 		this.name = name;
 		this.prefix = prefix;
+		this.permission = permission;
 		this.order = order;
 		this.exclusive = exclusive;
 	}
@@ -33,6 +35,7 @@ public class Tag {
 				stmtUpdate.setString(1, getPrefix());
 				stmtUpdate.setInt(2, getOrder());
 				stmtUpdate.setBoolean(3, isExclusive());
+				stmtUpdate.setString(4, getPermission());
 				stmtUpdate.execute();
 				stmtUpdate.close();
 			} else { 
@@ -41,6 +44,7 @@ public class Tag {
 				stmtInsert.setString(2, getPrefix());
 				stmtInsert.setInt(3, getOrder());
 				stmtInsert.setBoolean(4, isExclusive());
+				stmtInsert.setString(5, getPermission());
 				stmtInsert.execute();
 				stmtInsert.close();
 			}
@@ -68,5 +72,17 @@ public class Tag {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public boolean hasPrefix() {
+		return !getPrefix().equals("NRE");
+	}
+	
+	public void applyTag(BukkitPlayer bukkitPlayer) { 
+		if(bukkitPlayer.isOnline()) { 
+			TagUtils.getInstance().setNameTag(bukkitPlayer.getName(), "A" + getOrder(), getPrefix(), "");
+			bukkitPlayer.getPlayer().setDisplayName(getPrefix() + bukkitPlayer.getName());
+		}
+		bukkitPlayer.setTag(this.getName());
 	}
 }

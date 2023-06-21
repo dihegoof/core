@@ -10,6 +10,7 @@ public enum Tables {
 			DataValues.NICKNAME, 
 			DataValues.ADDRESS, 
 			DataValues.GROUP, 
+			DataValues.LAST_GROUP, 
 			DataValues.TIME_GROUP, 
 			DataValues.JOIN_IN, 
 			DataValues.LAST_SEE, 
@@ -20,7 +21,8 @@ public enum Tables {
 			DataValues.TAG_NAME,
 			DataValues.TAG_PREFIX,
 			DataValues.TAG_ORDER,
-			DataValues.TAG_EXCLUSIVE }),
+			DataValues.TAG_EXCLUSIVE,
+			DataValues.TAG_PERMISSION }),
 	
 	GROUPS("groups", new DataValues[] {
 			DataValues.GROUP_NAME,

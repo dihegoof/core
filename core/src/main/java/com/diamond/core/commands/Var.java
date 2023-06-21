@@ -50,6 +50,13 @@ public class Var extends Utils implements CommandExecutor {
 					}
 					if(args[2].equalsIgnoreCase("info")) { 
 						//abrir inventário da conta
+						try {
+							bp.save();
+							sendMessage(player, false, "§aSalvo!");
+						} catch (Exception e) {
+							sendMessage(player, false, "§cErro!");
+						}
+						
 					}
 					return true;
 				} else if(args.length == 4) { 
@@ -72,7 +79,7 @@ public class Var extends Utils implements CommandExecutor {
 							sendMessage(player, false, "§cEste grupo é temporário, é preciso definir com um tempo de expiração!");
 							return true;
 						}
-						bp.setGroup(group.getName());
+ 						bp.setGroup(group.getName());
 						if(bp.isOnline()) { 
 							sendMessage(bp.getPlayer(), true, "§aSeu grupo foi alterado para §7" + group.getName() + "§a!");
 						} else { 
@@ -100,6 +107,9 @@ public class Var extends Utils implements CommandExecutor {
 						if(!group.isTemporary()) {
 							sendMessage(player, false, "§cEste grupo não é temporário!");
 							return true;
+						}
+						if(bp.isGroupPermanent()) { 
+							bp.setLastGroup(bp.getGroup().getName());
 						}
 						long timeGroup = TimeManager.getInstance().getTime(args[4]);
 						if(timeGroup <= 0) {
@@ -156,13 +166,14 @@ public class Var extends Utils implements CommandExecutor {
 								"§aInfo da tag " + tag.getName() + "§a:",
 								"§aOrdem: §7" + tag.getOrder(),
 								"§aPrefixo: " + tag.getPrefix(),
+								"§aPermissão: " + tag.getPermission(),
 								"§aExclusiva? §7" + (tag.isExclusive() ? "Sim" : "Não"));
 					} else if(args[2].equalsIgnoreCase("criar")) { 
 						if(tag != null) { 
 							sendMessage(player, false, "§cJá existe uma tag com este nome!");
 							return true;
 						}
-						tag = new Tag(args[1], "NRE", 1, false);
+						tag = new Tag(args[1], "NRE", "tag." + args[1], 1, false);
 						TagManager.getInstance().add(tag);
 						sendMessage(player, false, "§aTag §7" + tag.getName() + " §acriada com sucesso!");
 					} else if(args[2].equalsIgnoreCase("deletar")) { 
@@ -195,6 +206,9 @@ public class Var extends Utils implements CommandExecutor {
 						} else { 
 							sendMessage(player, false, "§cNúmero inválido!");
 						}
+					} else if(args[2].equalsIgnoreCase("editarperm")) { 
+						tag.setPermission(args[3]);
+						sendMessage(player, false, "§aPermissão da tag §7" + tag.getName() + " §aalterada para §f" + tag.getPermission() + "§a!");
 					}
 					return true;
 				} else if(args.length >= 4) { 
@@ -249,6 +263,7 @@ public class Var extends Utils implements CommandExecutor {
 						group = new Group(args[1], new ArrayList<>(), false, false);
 						GroupManager.getInstance().add(group);
 						sendMessage(player, false, "§aGrupo §7" + group.getName() + " §acriado com sucesso!");
+						TagManager.getInstance().add(new Tag(group.getName(), "NRE", "tag." + group.getName(), 1, false));
 					} else if(args[2].equalsIgnoreCase("deletar")) { 
 						if(group == null) {
 							sendMessage(player, false, "§cEsta grupo não foi encontrado!");
@@ -325,7 +340,8 @@ public class Var extends Utils implements CommandExecutor {
 					"§c/" + label + " tag <nome da tag> deletar",
 					"§c/" + label + " tag <nome da tag> definirexclusiva",
 					"§c/" + label + " tag <nome da tag> editarordem <nova ordem>",
-					"§c/" + label + " tag <nome da tag> editarprefixo <nova prefixo>"
+					"§c/" + label + " tag <nome da tag> editarprefixo <nova prefixo>",
+					"§c/" + label + " tag <nome da tag> editarperm <nova permissão>"
 					);
 		} else if(session.equalsIgnoreCase("grupo")) { 
 			sintaxCommand(sender, 
