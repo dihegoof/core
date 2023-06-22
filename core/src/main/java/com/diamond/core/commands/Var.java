@@ -29,6 +29,10 @@ public class Var extends Utils implements CommandExecutor {
 				player.kickPlayer("§cVocê foi §lKICKADO§c!\n\n§cSua conta encontra-se com problemas!");
 				return true;
 			}
+			if(!bpSender.hasPermission("core.cmd.var")) {
+				sendMessage(player, false, "§cVocê não tem permissão para fazer isso!");
+				return true;
+			}
 			if(args.length == 0) {
 				help(label, "", sender);
 				return true;
@@ -181,7 +185,7 @@ public class Var extends Utils implements CommandExecutor {
 							sendMessage(player, false, "§cEsta tag não foi encontrada!");
 							return true;
 						}
-						sendMessage(player, false, "§cTag " + tag.getName() + " §cdeletada com sucesso!");
+						sendMessage(player, false, "§cTag §7" + tag.getName() + " §cdeletada com sucesso!");
 						tag.delete();
 						TagManager.getInstance().remove(tag);
 					} else if(args[2].equalsIgnoreCase("definirexclusiva")) { 
@@ -211,7 +215,7 @@ public class Var extends Utils implements CommandExecutor {
 						sendMessage(player, false, "§aPermissão da tag §7" + tag.getName() + " §aalterada para §f" + tag.getPermission() + "§a!");
 					}
 					return true;
-				} else if(args.length >= 4) { 
+				} else if(args.length >= 3) { 
 					Tag tag = TagManager.getInstance().get(args[1]);
 					if(tag == null) {
 						sendMessage(player, false, "§cEsta tag não foi encontrada!");

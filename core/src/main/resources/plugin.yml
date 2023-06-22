@@ -6,3 +6,7 @@ main: com.diamond.core.Main
 commands: 
    var:
    tag:
+   tp:
+      aliases: [teletransporte, teleport]
+   gm:
+      aliases: [gamemode]

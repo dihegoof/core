@@ -29,13 +29,15 @@ public class Main extends JavaPlugin {
 								  "player.tags.listener"
 	};
 	static String[] commands = { "commands", 
-					             "player.tags.commands" };
+					             "player.tags.commands", 
+	};
 	
     @Override
     public void onEnable() {
     	plugin = this;
+    	saveDefaultConfig();
     	debug("Plugin ativado com sucesso!");
-    	mysql = new MySql("127.0.0.1", "root", "", "server");
+    	mysql = new MySql(getConfig().getString("mysql.address"), getConfig().getString("mysql.user"), getConfig().getString("mysql.password"), getConfig().getString("mysql.database"));
     	mysql.open();
     	mysql.create();
     	BukkitPlayerManager.getInstance().load();

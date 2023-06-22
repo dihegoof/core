@@ -14,7 +14,7 @@ public enum CoreQuerys {
 	TAG_SELECT_ALL("SELECT * FROM `tags`;"),
 	TAG_INSERT("INSERT INTO `tags` (`tagname`,`tagprefix`,`tagorder`,`tagexclusive`,`tagpermission`) VALUES (?,?,?,?,?);"),
 	TAG_UPDATE("UPDATE `tags` SET `tagprefix`=?,`tagorder`=?,`tagexclusive`=?,`tagpermission`=? WHERE `tagname`=?"),
-	TAG_DELETE("DELETE FROM `tags` WHERE `tagname`=?;"),
+	TAG_DELETE("DELETE FROM `tags` WHERE `tagname`=?"),
 	
 	GROUP_SELECT("SELECT * FROM `groups` WHERE `groupname`=?"),
 	GROUP_SELECT_ALL("SELECT * FROM `groups`;"),

@@ -30,5 +30,8 @@ public class PermissionManager {
 		add(new Permission("core.cmd.varcontagrupo", "Comando para utilizar o var conta para setar grupos"));
 		add(new Permission("core.cmd.vartag", "Comando para utilizar o var tag em geral"));
 		add(new Permission("core.cmd.vargrupo", "Comando para utilizar o var grupo em geral"));
+		add(new Permission("core.cmd.var", "Comando para utilizar o var"));
+		add(new Permission("core.cmd.gm", "Comando para utilizar o gamemode"));
+		add(new Permission("core.cmd.tp", "Comando para utilizar o tp"));
 	}
 }
